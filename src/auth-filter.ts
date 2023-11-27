@@ -4,8 +4,7 @@ import { NextFunction, Request, RequestHandler, Response, Router } from 'express
 const authFilter = Router();
 
 let notAuthorizedResponse = {
-  message: 'Not authorized!',
-  referer: ''
+  message: 'Not authorized!'
 };
 
 const checkForIdToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -24,7 +23,6 @@ const checkForIdToken = async (req: Request, res: Response, next: NextFunction) 
   const data = await response.data;
 
   if (data && data.email !== 'matt.voget@gmail.com') {
-    notAuthorizedResponse.referer = req.headers.referer;
     return res.status(400).json(notAuthorizedResponse);
   }
 
