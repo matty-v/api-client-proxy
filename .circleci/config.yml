@@ -10,8 +10,8 @@ commands:
       - run:
           name: Authenticate with Google Cloud SDK
           command: |
-            apt-get update && apt-get install -y unzip
-            unzip -P $GCP_DECRYPTION_PASSWORD .circleci/gcp-svc-acct.zip
+            apt-get update && apt-get install -y p7zip-full
+            7z x .circleci/gcp-svc-acct.7z -p$GCP_DECRYPTION_PASSWORD
             gcloud auth activate-service-account --key-file=kinetic-object-322814-d3b06bf2ac93.json --project=kinetic-object-322814
             gcloud -q auth configure-docker
 
