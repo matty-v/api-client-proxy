@@ -1,0 +1,51 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7.0
+
+commands:
+  gcloud-auth:
+    description: Authenticates with Google Cloud SDK
+    steps:
+      - run:
+          name: Authenticate with Google Cloud SDK
+          command: |
+            apt-get update && apt-get install -y unzip
+            unzip -P $GCP_DECRYPTION_PASSWORD .circleci/gcp-svc-acct.zip
+            gcloud auth activate-service-account --key-file=kinetic-object-322814-d3b06bf2ac93.json --project=kinetic-object-322814
+            gcloud -q auth configure-docker
+
+jobs:
+  build-and-deploy-proxy-server:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - gcloud-auth
+      - node/install
+      - run:
+          name: 'Build and Deploy Proxy Server'
+          command: |
+
+            # build
+            npm ci --silent
+            npm run build
+
+            # cloud function deploy
+            gcloud functions deploy Api-Client-Proxy \
+            --gen2 \
+            --trigger-http \
+            --region=us-central1 \
+            --runtime=nodejs20 \
+            --entry-point=proxy \
+            --memory=1024M \
+            --allow-unauthenticated
+
+workflows:
+  default:
+    jobs:
+      - build-and-deploy-proxy-server:
+          filters:
+            branches:
+              only:
+                - master

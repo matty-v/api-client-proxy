@@ -7,9 +7,7 @@
     "build": "tsc -p .",
     "test": "jest --silent",
     "test-server": "nodemon ./src/test-server.ts",
-    "cf-dev": "npm run build && npx @google-cloud/functions-framework --target=proxy",
-    "deploy-cloud-function-linux": "./deploy-cloud-function.sh",
-    "deploy-cloud-function-windows": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./deploy-cloud-function.ps1"
+    "cf-dev": "npm run build && npx @google-cloud/functions-framework --target=proxy"
   },
   "keywords": [],
   "author": "",

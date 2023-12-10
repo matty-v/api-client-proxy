@@ -7,5 +7,5 @@ export type ProxyRequest = {
 
 export enum ProxyMethod {
   'GET',
-  'POST'
+  'POST',
 }
